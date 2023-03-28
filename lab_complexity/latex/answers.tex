@@ -1,0 +1,82 @@
+\documentclass[a4paper]{report}
+\input{C:/Users/Sebastian/source/repos/Studies/preamble.tex}
+\title{Hand-in Complexity}
+\author{Sebastian Pålsson, Oscar Rei, Nils Lyrevik}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Part 1}
+
+\begin{enumerate}
+    \item $T(n) = \log_n(n) \implies T(100) = \log_2(100) \approx  6.64  $
+          \begin{enumerate}[(a)]
+              \item $T(101) = \log_2(101) \approx  6.66 \approx 1.002 \cdot T(100) \implies 0.2 \%$ längre
+              \item $T(200) = \log_2(200) \approx  7.64 \approx 1.15 \cdot T(100) \implies 15 \%$ längre
+              \item $T(10000) = \log_2(10000) \approx  13.3 \approx 2 \cdot T(100) \implies 2 $ gånger längre
+              \item $T(n) = 100000 = \log_2(n) \implies n = 2^{100000}$
+          \end{enumerate}
+    \item $T(n) = n \implies T(100) = 100   $
+          \begin{enumerate}[(a)]
+              \item $T(101) = 101 = 1.01 \cdot T(100) \implies 1 \%$ längre
+              \item $T(200) = 200 = 2 \cdot T(100) \implies 2$ gånger längre
+              \item $T(10000) = 10000 = 100 \cdot T(100) \implies 100$ gånger längre
+              \item $T(n) = 100000 \implies n = 100000$
+          \end{enumerate}
+    \item Lösning redan given i uppgiften.
+    \item $T(n) = n^{2} \implies T(100) = 10000$
+          \begin{enumerate}[(a)]
+              \item $T(101) = 10201 \approx  1.02 \cdot T(100) \implies 2 \%$ längre
+              \item $T(200) = 40000 = 4 \cdot T(100) \implies 4$ gånger längre
+              \item $T(10000) = 100000000 = 10000 \cdot T(100) \implies 10000$ gånger längre
+              \item $T(n) = 100000 = n^{2} \implies n \approx  316 $
+          \end{enumerate}
+    \item $T(n) = n^{3} \implies T(100) = 100000$
+          \begin{enumerate}[(a)]
+              \item $T(101) = 1030301 \approx  1.03 \cdot T(100) \implies 3 \%$ längre
+              \item $T(200) = 8000000 = 8 \cdot T(100) \implies 8$ gånger längre
+              \item $T(10000) = 10^{12} = 10^{6} \cdot T(100) \implies 10^{6}$ gånger längre
+              \item $T(n) = 100000 = n^{3} \implies n \approx  46 $
+          \end{enumerate}
+    \item $T(n) = 2^{n} \implies T(100) = 2^{100}$
+          \begin{enumerate}[(a)]
+              \item $T(101) = 2^{101} =  2 \cdot T(100) \implies 2 $ gånger längre
+              \item $T(200) = 2^{200} =  2^{100} \cdot T(100) \implies 2^{100} $ gånger längre
+              \item $T(10000) = 2^{10000} =  2^{9900} \cdot T(100) \implies 2^{9900} $ gånger längre
+              \item $T(n) = 100000 = 2^{n} \implies n \approx  17 $
+          \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\section*{Part 2}
+
+\begin{enumerate}
+    \item $T(n) = n$
+    \item $T(n) = n(n-1)$
+    \item $T(n) = n + (n-1) = 2n-1$
+    \item $T(n) = \log_{2}n \cdot n^{2}$
+    \item $T(n) = \frac{n(n+1)}{2}$
+    \item $T(n) = \begin{dcases}
+                  1 + T(n-1) & \text{ if } n > 0   \\
+                  0          & \text{ if } n \le 0 \\
+              \end{dcases}  \implies O(n)$
+    \item $T(n) = \begin{dcases}
+                  \frac{n(n+1)}{2} + T(n-1) & \text{ if } n > 0   \\
+                  0                         & \text{ if } n \le 0 \\
+              \end{dcases}  \implies O(n^{2})$
+    \item $T(n) = \begin{dcases}
+                  1 + T(n/2) & \text{ if } n > 1   \\
+                  0          & \text{ if } n \le 1 \\
+              \end{dcases}  \implies O(\log_{2}n)$
+    \item $T(n) = \begin{dcases}
+                  \frac{n(n+1)}{2} + T(n/2) & \text{ if } n > 1   \\
+                  0                         & \text{ if } n \le 1 \\
+              \end{dcases}  \implies O(\log_{2}(n) \cdot n)$
+    \item $T(n) = \begin{dcases}
+                  0              & \text{ if } n = 0  \\
+                  2 \cdot T(n-1) & \text{ otherwise } \\
+              \end{dcases}  \implies O(n^{2})$
+\end{enumerate}
+
+\end{document}
