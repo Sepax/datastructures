@@ -55,30 +55,23 @@ public class App {
     // Partition part of an array, and return the index where the pivot
     // ended up.
     private static int partition(int[] array, int begin, int end) {
-        Random random = new Random();
-        int pivotIndex = random.nextInt(begin, end);
-        int pivot = array[pivotIndex];
 
-        while (end > begin) {
+        int pivot = array[end];
+        int pointer = (begin-1);
 
-            while (array[begin] < pivot) {
-                begin++;
+        for (int j = begin; j < end; j++) {
+
+            if (array[j] <= pivot){
+
+            
+                pointer++;
+                swap(array, i, j);
             }
-
-            while (array[end] > pivot) {
-                end--;
-            }
-
-            swap(array, begin, end);
-            begin++;
-            end--;
         }
-        System.out.println("begin: " + begin);
-        System.out.println("end: " + end);
-        System.out.println(Arrays.toString(array));
-        swap(array, pivotIndex, end);
+        swap(array, pointer+1, end);
+        return pointer+1;
+        
 
-        return end;
     }
 
     // Swap two elements in an array
