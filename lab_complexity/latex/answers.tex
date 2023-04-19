@@ -43,7 +43,7 @@
               \item $T(101) = 2^{101} =  2 \cdot T(100) \implies 2 $ gånger längre
               \item $T(200) = 2^{200} =  2^{100} \cdot T(100) \implies 2^{100} $ gånger längre
               \item $T(10000) = 2^{10000} =  2^{9900} \cdot T(100) \implies 2^{9900} $ gånger längre
-              \item $T(n) = 100000 = 2^{n} \implies n \approx  17 $
+              \item $T(n) = 100000 = 2^{n} \implies n \approx  13 $
           \end{enumerate}
 \end{enumerate}
 
@@ -62,16 +62,16 @@
                   0          & \text{ if } n \le 0 \\
               \end{dcases}  \implies O(n)$
     \item $T(n) = \begin{dcases}
-                  \frac{n(n+1)}{2} + T(n-1) & \text{ if } n > 0   \\
-                  0                         & \text{ if } n \le 0 \\
+                  n + T(n-1) & \text{ if } n > 0   \\
+                  0          & \text{ if } n \le 0 \\
               \end{dcases}  \implies O(n^{2})$
     \item $T(n) = \begin{dcases}
                   1 + T(n/2) & \text{ if } n > 1   \\
                   0          & \text{ if } n \le 1 \\
               \end{dcases}  \implies O(\log_{2}n)$
     \item $T(n) = \begin{dcases}
-                  \frac{n(n+1)}{2} + T(n/2) & \text{ if } n > 1   \\
-                  0                         & \text{ if } n \le 1 \\
+                  n + T(n/2) & \text{ if } n > 1   \\
+                  0          & \text{ if } n \le 1 \\
               \end{dcases}  \implies O(\log_{2}(n) \cdot n)$
     \item $T(n) = \begin{dcases}
                   0              & \text{ if } n = 0  \\
