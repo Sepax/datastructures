@@ -17,10 +17,13 @@ public class Lab1 {
     public static void insertionSort(int[] array) {
         for (int i = 1; i < array.length; i++) {
             int j = i;
-            while (j > 0 && array[j - 1] > array[j]) {
-                swap(array, j - 1, j);
+            int temp = array[i];
+
+            while (j > 0 && array[j - 1] > temp) {
+                array[j] = array[j-1];
                 j--;
             }
+            array[j] = temp;
         }
     }
 
@@ -36,35 +39,37 @@ public class Lab1 {
             // Choose a pivot index and partition the array around it
             int pivotIndex = partition(array, left, right);
             // Recursively sort the left and right partitions
-            quickSort(array, left, pivotIndex - 1);
+            quickSort(array, left, pivotIndex);
             quickSort(array, pivotIndex + 1, right);
         }
     }
 
     // Partition part of an array, and return the index where the pivot
     // ended up.
-    private static int partition(int[] array, int left, int right) {
-        // Choose a random pivot index
-        int pivotIndex = left + random.nextInt(right - left + 1);
-        int pivotValue = array[pivotIndex];
-        // Move the pivot element to the end of the array
-        swap(array, pivotIndex, right);
-        // Keep track of the index where elements less than the pivot value will be
-        // stored
-        int storeIndex = left;
-        // Iterate over the array and move elements less than the pivot value to the
-        // left partition
-        for (int i = left; i < right; i++) {
-            if (array[i] < pivotValue) {
-                swap(array, i, storeIndex);
-                storeIndex++;
+    private static int partition(int[] array, int low, int high) {
+        
+            int pivot = array[low];
+            int i = low - 1;
+            int j = high + 1;
+            
+            while (true)
+            {
+
+                do {
+                    i++;
+                } while (array[i] < pivot);
+         
+                do {
+                    j--;
+                } while (array[j] > pivot);
+
+                if (i >= j) {
+                    return j;
+                }
+         
+                swap(array,i,j);
             }
         }
-        // Move the pivot element to its final place
-        swap(array, storeIndex, right);
-        // Return the index of the pivot element
-        return storeIndex;
-    }
 
     // Swap two elements in an array
     private static void swap(int[] array, int i, int j) {
