@@ -7,7 +7,13 @@ emptySkew = Empty
 single :: a -> Skew a
 single x = Node x Empty Empty
 
-skewHeap :: Eq a => Skew a -> Skew a -> Skew a
-skewHeap x Empty = x
-skewHeap Empty y = y
-skewHeap
+
+mergeSkew :: Ord a => Skew a -> Skew a -> Skew a
+mergeSkew (Node elem (left) (right)) Empty = (Node elem (left) (right))
+mergeSkew Empty (Node elem (left) (right)) = (Node elem (left) (right))
+mergeSkew Empty Empty                      = Empty
+mergeSkew (Node elem1 (l1) (r1)) (Node elem2 (l2) (r2)) 
+    | elem1 < elem2 = Node elem1 (merge r1 (Node elem2 (l2) (r2))) (l1)
+    | otherwise     = Node elem2 (merge r2 (Node elem1 (l1) (r2))) (l2)
+
+
