@@ -17,3 +17,10 @@ mergeSkew (Node elem1 (l1) (r1)) (Node elem2 (l2) (r2))
     | otherwise     = Node elem2 (merge r2 (Node elem1 (l1) (r2))) (l2)
 
 
+delete ::  Ord a => a -> Skew a -> Skew a
+delete _ Empty = Empty
+delete x (Node elem (left) (right))
+    | x < elem   = Node elem (delete x right) left
+    | x > elem   = Node elem left (delete x right)
+    | otherwise  = mergeSkew left right
+
