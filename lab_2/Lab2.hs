@@ -1,6 +1,8 @@
 import Control.Applicative
+import Data.Function (on)
 import System.Environment
 import System.IO
+import SkewHeap
 
 -- | Bids.
 
@@ -65,6 +67,23 @@ main = do
 trade :: [Bid] -> IO ()
 trade = undefined
 
+data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price}
+
+instance Ord BuyBid where
+    (<=) = (>=) `on` buyTheBid
+
+instance Eq BuyBid where
+    (==) = (==) `on` buyTheBid
 
 
+data SellBid = Seller {seller :: Person , sellTheBid :: Price}
 
+instance Ord SellBid where
+    (<=) = (<=) `on` sellTheBid
+
+instance Eq SellBid where
+    (==) = (==) `on` sellTheBid
+
+data OrderBook = BuyBids (Skew BuyBid) | SellBids (Skew SellBid)
+
+--trade :: OrderBook ->
