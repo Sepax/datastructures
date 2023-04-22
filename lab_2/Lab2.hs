@@ -86,4 +86,4 @@ instance Eq SellBid where
 
 data OrderBook = BuyBids (Skew BuyBid) | SellBids (Skew SellBid)
 
---trade :: OrderBook ->
+--trade :: OrderBook -> [Bid] -> IO
