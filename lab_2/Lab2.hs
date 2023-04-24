@@ -3,6 +3,7 @@ import Data.Function (on)
 import System.Environment
 import System.IO
 import SkewHeap
+import Control.Monad
 
 -- | Bids.
 
@@ -84,6 +85,28 @@ instance Ord SellBid where
 instance Eq SellBid where
     (==) = (==) `on` sellTheBid
 
-data OrderBook = BuyBids (Skew BuyBid) | SellBids (Skew SellBid)
+data OrderBook = Prioque (Skew BuyBid, Skew SellBid)
 
---trade :: OrderBook -> [Bid] -> IO
+--tradeHelper :: OrderBook -> [Bid] -> IO ()
+--tradeHelper orderbook bids = do
+
+
+main1 :: IO ()
+main1 = do 
+  file <- readFile "bidders.txt"
+  let list = lines file
+  let bidList = fileToBid list 
+  case bidList of 
+    Left x ->  print ("parse failed" ++ x)
+    Right x -> print x
+ 
+
+
+
+
+fileToBid :: [String] -> Either String [Bid]
+fileToBid strList = traverse parseBid strList
+
+
+
+
