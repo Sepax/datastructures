@@ -1,4 +1,4 @@
-module SkewHeap (Skew, mergeSkew, deleteSkew, insertSkew) where
+module SkewHeap (Skew, mergeSkew, deleteSkew, insertSkew, single, emptySkew) where
 
 data Skew a = Empty | Node a (Skew a) (Skew a)
 

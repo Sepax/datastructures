@@ -85,7 +85,7 @@ instance Ord SellBid where
 instance Eq SellBid where
     (==) = (==) `on` sellTheBid
 
-data OrderBook = Prioque (Skew BuyBid, Skew SellBid)
+data OrderBook = OrderBook (Skew BuyBid, Skew SellBid)
 
 --tradeHelper :: OrderBook -> [Bid] -> IO ()
 --tradeHelper orderbook bids = do
@@ -97,15 +97,38 @@ main1 = do
   let list = lines file
   let bidList = fileToBid list 
   case bidList of 
-    Left x ->  print ("parse failed" ++ x)
+    Left x ->  print ("WRONG INPUT NOT BUYER OR SELLER (parse failed) >" ++ x)
     Right x -> print x
- 
+  --let ob = orderBids bidList
+
+  
 
 
 
 
 fileToBid :: [String] -> Either String [Bid]
 fileToBid strList = traverse parseBid strList
+
+
+
+
+
+buySingle :: BuyBid -> Skew BuyBid
+buySingle buybid = single buybid 
+
+sellSingle :: SellBid -> Skew SellBid
+sellSingle sellbid = single sellbid
+
+orderBids :: [Bid] -> Orderbook 
+orderBids [] = undefined
+orderBids (bid:bids) = case bid of 
+  (Buy name price)                 -> (OrderBook (go empty (bid:bids),))
+  (Sell name price)                -> (OrderBook )
+  (NewBuy name oldPrice newPrice)  -> (OrderBook )
+  (NewSell name oldPrice newPrice) -> (OrderBook )
+  where
+    go (Orderbook (Skew buy) (Skew sell)) (bid:bids) = go (insertSkew bid skew) bids
+    go skew [] = skew
 
 
 
