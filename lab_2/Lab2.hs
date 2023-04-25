@@ -68,7 +68,7 @@ main = do
 trade :: [Bid] -> IO ()
 trade = undefined
 
-data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price} deriving Show
+data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price}
 
 instance Ord BuyBid where
     (<=) = (>=) `on` buyTheBid
@@ -76,8 +76,11 @@ instance Ord BuyBid where
 instance Eq BuyBid where
     (==) = (==) `on` buyTheBid
 
+instance Show BuyBid where
+  show (Buyer buyer buythebid) = show buyer ++ " " ++ show buythebid
 
-data SellBid = Seller {seller :: Person , sellTheBid :: Price} deriving Show
+
+data SellBid = Seller {seller :: Person , sellTheBid :: Price}
 
 instance Ord SellBid where
     (<=) = (<=) `on` sellTheBid
@@ -86,6 +89,11 @@ instance Eq SellBid where
     (==) = (==) `on` sellTheBid
 
   -- MÅSTE FIXA INSTANCE SHOW FÖR SELLBID OCH BUUY BID!!!!!!
+
+instance Show SellBid where
+  show (Seller seller sellthebid) = show seller ++ " " ++ show sellthebid
+
+
   
 
 data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
@@ -143,9 +151,11 @@ printOB (OrderBook (buyersBids,sellerBids)) =
   "Sellers -> "   ++ showSell sellerBids ++ "\n" ++
   "Buyers -> "    ++ showSell buyersBids
     where
-      showSell x@(Node seller selltree1 selltree2) = case isEmpty x of
+      showSell x@(Node seller sellt1 sellt2) = case isEmpty x of
         True      -> ""
-        False     -> show seller ++ (showSell selltree1) ++ (showSell selltree2)
+        False     ->  show seller ++ " : " ++ (showSell sellt1) ++ " " ++ (showSell sellt2) 
+      showSell empty = ""
+      
 
       
       
