@@ -119,16 +119,16 @@ buySingle buybid = single buybid
 sellSingle :: SellBid -> Skew SellBid
 sellSingle sellbid = single sellbid
 
-orderBids :: [Bid] -> Orderbook 
-orderBids [] = undefined
-orderBids (bid:bids) = case bid of 
-  (Buy name price)                 -> (OrderBook (go empty (bid:bids),))
-  (Sell name price)                -> (OrderBook )
-  (NewBuy name oldPrice newPrice)  -> (OrderBook )
-  (NewSell name oldPrice newPrice) -> (OrderBook )
-  where
-    go (Orderbook (Skew buy) (Skew sell)) (bid:bids) = go (insertSkew bid skew) bids
-    go skew [] = skew
+orderBids :: [Bid] -> OrderBook -> OrderBook 
+orderBids [] (OrderBook (buy,sell)) =(OrderBook (buy,sell))
+orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of 
+  (Buy name price)                 -> orderBids bids (OrderBook ((insertSkew (Buyer name price) (buy)),(sell)))
+  (Sell name price)                -> orderBids bids (OrderBook ((buy),(insertSkew (Seller name price) (sell))))
+  (NewBuy name oldPrice newPrice)  -> orderBids bids (OrderBook ((insertSkew (Buyer name newPrice) (buy)),(sell)))
+  (NewSell name oldPrice newPrice) -> orderBids bids (OrderBook ((buy),(insertSkew (Seller name newPrice) (sell))))
+
+orderBids' :: [Bid] -> OrderBook
+orderBids' bids = orderBids bids (OrderBook (emptySkew, emptySkew))
 
 
 
