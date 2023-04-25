@@ -1,7 +1,14 @@
-module SkewHeap (Skew(..), mergeSkew, deleteSkew, insertSkew, single, emptySkew) where
+module SkewHeap (Skew(..), mergeSkew, deleteSkew, insertSkew, single, emptySkew, isEmpty) where
 
 -- data type for our Skewheap, Basic tree structure
 data Skew a = Empty | Node a (Skew a) (Skew a) deriving Show
+
+
+
+isEmpty :: Skew a -> Bool
+isEmpty skew = case skew of 
+    Empty -> True
+    _     -> False
 
 -- creates a empty skew
 emptySkew :: Skew a

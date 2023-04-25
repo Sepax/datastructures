@@ -85,7 +85,12 @@ instance Ord SellBid where
 instance Eq SellBid where
     (==) = (==) `on` sellTheBid
 
+  -- MÅSTE FIXA INSTANCE SHOW FÖR SELLBID OCH BUUY BID!!!!!!
+  
+
 data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
+
+
 
 --tradeHelper :: OrderBook -> [Bid] -> IO ()
 --tradeHelper orderbook bids = do
@@ -96,15 +101,22 @@ main1 = do
   file <- readFile "bidders.txt"
   let list = lines file
   let bidList = fileToBid list 
+  let bidLIST = eitherToBids bidList
   case bidList of 
     Left x ->  print ("WRONG INPUT NOT BUYER OR SELLER (parse failed) >" ++ x)
-    Right x -> x
-  let ob = orderBids' bidList
-  print ob
+    Right x -> print x 
+  let ob = orderBids' bidLIST
+  print "THE ORDERBOOK IS HERE > "
+  putStrLn (printOB ob)
 
 -- takes a List of String and returns a Either String or a List of Bids
 fileToBid :: [String] -> Either String [Bid]
 fileToBid strList = traverse parseBid strList
+
+eitherToBids :: Either String [Bid] -> [Bid]
+eitherToBids either = case either of 
+  Right x -> x
+  Left x -> error "ooopsie"
 
 buySingle :: BuyBid -> Skew BuyBid
 buySingle buybid = single buybid 
@@ -124,6 +136,21 @@ orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of
 -- inputs a list of bids and returns a Orderbook with a two SkewHeaps (one for buyers one for sellers)
 orderBids' :: [Bid] -> OrderBook
 orderBids' bids = orderBids bids (OrderBook (emptySkew, emptySkew))
+
+printOB :: OrderBook -> String
+printOB (OrderBook (buyersBids,sellerBids)) =
+  "Order book:\n" ++
+  "Sellers -> "   ++ showSell sellerBids ++ "\n" ++
+  "Buyers -> "    ++ showSell buyersBids
+    where
+      showSell x@(Node seller selltree1 selltree2) = case isEmpty x of
+        True      -> ""
+        False     -> show seller ++ (showSell selltree1) ++ (showSell selltree2)
+
+      
+      
+      
+
 
 
 
