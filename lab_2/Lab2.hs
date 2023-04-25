@@ -68,7 +68,7 @@ main = do
 trade :: [Bid] -> IO ()
 trade = undefined
 
-data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price}
+data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price} deriving Show
 
 instance Ord BuyBid where
     (<=) = (>=) `on` buyTheBid
@@ -77,7 +77,7 @@ instance Eq BuyBid where
     (==) = (==) `on` buyTheBid
 
 
-data SellBid = Seller {seller :: Person , sellTheBid :: Price}
+data SellBid = Seller {seller :: Person , sellTheBid :: Price} deriving Show
 
 instance Ord SellBid where
     (<=) = (<=) `on` sellTheBid
@@ -85,7 +85,7 @@ instance Ord SellBid where
 instance Eq SellBid where
     (==) = (==) `on` sellTheBid
 
-data OrderBook = OrderBook (Skew BuyBid, Skew SellBid)
+data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
 
 --tradeHelper :: OrderBook -> [Bid] -> IO ()
 --tradeHelper orderbook bids = do
@@ -98,20 +98,13 @@ main1 = do
   let bidList = fileToBid list 
   case bidList of 
     Left x ->  print ("WRONG INPUT NOT BUYER OR SELLER (parse failed) >" ++ x)
-    Right x -> print x
-  --let ob = orderBids bidList
+    Right x -> x
+  let ob = orderBids' bidList
+  print ob
 
-  
-
-
-
-
+-- takes a List of String and returns a Either String or a List of Bids
 fileToBid :: [String] -> Either String [Bid]
 fileToBid strList = traverse parseBid strList
-
-
-
-
 
 buySingle :: BuyBid -> Skew BuyBid
 buySingle buybid = single buybid 
@@ -119,6 +112,7 @@ buySingle buybid = single buybid
 sellSingle :: SellBid -> Skew SellBid
 sellSingle sellbid = single sellbid
 
+-- Helper function for orderbids' witch has an extra argument of OrderBook
 orderBids :: [Bid] -> OrderBook -> OrderBook 
 orderBids [] (OrderBook (buy,sell)) =(OrderBook (buy,sell))
 orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of 
@@ -127,6 +121,7 @@ orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of
   (NewBuy name oldPrice newPrice)  -> orderBids bids (OrderBook ((insertSkew (Buyer name newPrice) (buy)),(sell)))
   (NewSell name oldPrice newPrice) -> orderBids bids (OrderBook ((buy),(insertSkew (Seller name newPrice) (sell))))
 
+-- inputs a list of bids and returns a Orderbook with a two SkewHeaps (one for buyers one for sellers)
 orderBids' :: [Bid] -> OrderBook
 orderBids' bids = orderBids bids (OrderBook (emptySkew, emptySkew))
 
