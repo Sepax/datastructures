@@ -1,43 +1,41 @@
-module SkewHeap (Skew(..), mergeSkew, deleteSkew, insertSkew, single, emptySkew, isEmpty) where
+module SkewHeap (Skew(..), merge, insert, getMin, delMin, single, emptySkew, toSkew) where
 
--- data type for our Skewheap, Basic tree structure
-data Skew a = Empty | Node a (Skew a) (Skew a) deriving Show
+import Data.List (foldl', unfoldr)
+import Data.Maybe
 
-
-
-isEmpty :: Skew a -> Bool
-isEmpty skew = case skew of 
-    Empty -> True
-    _     -> False
+-- data type for our Skewheap, Basic tree structure 
+data Skew a = Leaf | Node a (Skew a) (Skew a) deriving Show
 
 -- creates a empty skew
 emptySkew :: Skew a
-emptySkew = Empty
+emptySkew = Leaf
 
--- creates a skew with a single node of type a
-single :: a -> Skew a
-single x = Node x Empty Empty
+-- creates a skew with a single node
+single :: Ord a => a -> Skew a
+single x = Node x Leaf Leaf
 
 -- fundemental function that gives our tree structure SkewHeap properites 
-mergeSkew :: Ord a => Skew a -> Skew a -> Skew a
-mergeSkew (Node elem (left) (right)) Empty = (Node elem (left) (right))
-mergeSkew Empty (Node elem (left) (right)) = (Node elem (left) (right))
-mergeSkew Empty Empty                      = Empty
-mergeSkew (Node elem1 (l1) (r1)) (Node elem2 (l2) (r2)) 
-    | elem1 <= elem2 = Node elem1 (mergeSkew r1 (Node elem2 (l2) (r2))) (l1)
-    | otherwise     = Node elem2 (mergeSkew r2 (Node elem1 (l1) (r2))) (l2)
+merge :: Ord a => Skew a -> Skew a -> Skew a
+merge t1 Leaf = t1
+merge Leaf t2 = t2
+merge t1@(Node e1 l1 r1) t2@(Node e2 l2 r2)
+    | e1 <= e2 = Node e1 (merge t2 r1) l1
+    | otherwise = Node e2 (merge t1 r2) l2
 
--- delete element from Skew
-deleteSkew ::  Ord a => a -> Skew a -> Skew a
-deleteSkew _ Empty = Empty
-deleteSkew x (Node elem (left) (right))
-    | x < elem     = Node elem (deleteSkew x right) left
-    | x > elem     = Node elem left (deleteSkew x right)
-    | otherwise    = mergeSkew left right
+-- insert element into Skew
+insert :: Ord a => a -> Skew a -> Skew a
+insert x heap = merge (single x) heap
 
--- inserts element into skew
-insertSkew :: Ord a => a -> Skew a -> Skew a
-insertSkew newElem Empty = Node newElem Empty Empty
-insertSkew newElem (Node elem (left) (right))
-    | newElem > elem  = (Node elem (insertSkew newElem right) (left))
-    | otherwise       = (Node newElem (Node elem (left) (right)) Empty)
+-- find minimum element from Skew
+getMin :: Ord a => Skew a -> Maybe a
+getMin Leaf = Nothing
+getMin (Node x l r) = Just x
+
+-- extract minimum element from Skew
+delMin :: Ord a => Skew a -> Skew a
+delMin Leaf = Leaf
+delMin (Node x l r) = (merge l r)
+
+-- create a Skew from a list
+toSkew :: Ord a => [a] -> Skew a
+toSkew = foldl' (flip insert) emptySkew
