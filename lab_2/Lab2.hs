@@ -66,7 +66,11 @@ main = do
 -- | The core of the program. Takes a list of bids and executes them.
 
 trade :: [Bid] -> IO ()
-trade = undefined
+trade bidList = undefined
+
+
+tradeHelper :: OrderBook -> [Bid] -> IO ()
+tradeHelper orderbook bids = undefined
 
 data BuyBid = Buyer {buyer :: Person , buyTheBid ::  Price}
 
@@ -100,8 +104,7 @@ data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
 
 
 
---tradeHelper :: OrderBook -> [Bid] -> IO ()
---tradeHelper orderbook bids = do
+
 
 
 main1 :: IO ()
@@ -145,6 +148,14 @@ orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of
 orderBids' :: [Bid] -> OrderBook
 orderBids' bids = orderBids bids (OrderBook (emptySkew, emptySkew))
 
+singleTransaction :: OrderBook -> OrderBook
+singleTransaction (OrderBook ((Node (Buyer buyname buyprice) btree1 btree2 ),(Node (Seller sellname sellprice) stree1 stree2)))
+  | sellprice <= buyprice   = (OrderBook ((deleteSkew (Buyer buyname buyprice) (Node (Buyer buyname buyprice) btree1 btree2)),
+  (deleteSkew (Seller sellname sellprice) (Node (Seller sellname sellprice) stree1 stree2))))
+  | otherwise         = (OrderBook ((Node (Buyer buyname buyprice) btree1 btree2 ),(Node (Seller sellname sellprice) stree1 stree2)))
+  
+ 
+
 printOB :: OrderBook -> String
 printOB (OrderBook (buyersBids,sellerBids)) =
   "Order book:\n" ++
@@ -153,15 +164,6 @@ printOB (OrderBook (buyersBids,sellerBids)) =
     where
       showSell x@(Node seller sellt1 sellt2) = case isEmpty x of
         True      -> ""
-        False     ->  show seller ++ " : " ++ (showSell sellt1) ++ " " ++ (showSell sellt2) 
+        False     ->  show seller ++ " , " ++ (showSell sellt1) ++ (showSell sellt2) 
       showSell empty = ""
       
-
-      
-      
-      
-
-
-
-
-
