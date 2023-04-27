@@ -72,10 +72,10 @@ trade bids = do
   trade' buyHeap sellHeap
   return ()
 
-trade' :: Skew Bid -> Skew Bid -> IO ()
+trade' :: Skew BuyBid -> Skew SellBid -> IO ()
 trade' buyHeap sellHeap = do
   case (getMin buyHeap, getMin sellHeap) of
-    (Just (Buy _ buyPrice), Just (Sell _ sellPrice)) -> do
+    (Just (BuyBid _ buyPrice), Just (SellBid _ sellPrice)) -> do
       if buyPrice >= sellPrice
         then do
           putStrLn $ "Trade: " ++ show buyPrice
@@ -83,14 +83,38 @@ trade' buyHeap sellHeap = do
         else return ()
     _ -> return ()
 
-partitionBids :: [Bid] -> ([Bid], [Bid])
+partitionBids :: [Bid] -> ([BuyBid], [SellBid])
 partitionBids = foldr partitionBids' ([], [])
   where
-  partitionBids' bid (buyBids, sellBids) = case bid of
-    Buy _ _ -> (bid : buyBids, sellBids)
-    Sell _ _ -> (buyBids, bid : sellBids)
-    NewBuy _ _ _ -> (bid : buyBids, sellBids)
-    NewSell _ _ _ -> (buyBids, bid : sellBids)
+    partitionBids' bid (buyBids, sellBids) = case bid of
+      Buy n p -> ((BuyBid n p)  : buyBids, sellBids)
+      Sell n p -> (buyBids, (SellBid n p) : sellBids)
+      NewBuy n _ p -> ((BuyBid n p) : buyBids, sellBids)
+      NewSell n _ p -> (buyBids, (SellBid n p) : sellBids)
 
 
+-- SellBid data type
+data SellBid = SellBid Person Price
 
+instance Eq SellBid where
+  b == b' = name b == name b'
+    where
+      name (SellBid person price) = person
+
+instance Ord SellBid where
+  b <= b' = price b <= price b'
+    where
+      price (SellBid person p) = p
+
+-- BuyBid data type
+data BuyBid = BuyBid Person Price
+
+instance Eq BuyBid where
+  b == b' = name b == name b'
+    where
+      name (BuyBid person _) = person
+
+instance Ord BuyBid where
+  b <= b' = price b >= price b'
+    where
+      price (BuyBid person p) = p
