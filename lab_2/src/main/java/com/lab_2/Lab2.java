@@ -64,24 +64,24 @@ public class Lab2 {
 			if (sell_pq.minimum().bid <= buy_pq.minimum().bid) {
 				Bid seller = sell_pq.minimum();
 				Bid buyer = buy_pq.minimum();
-				sb.append("Transaction -> " + "Selling bid: " + seller.toString() + " Buying bid " + buyer.toString()
-						+ "\n");
+				sb.append("Transaction: " + buyer.name + " buys a share from " + seller.name + " for " + buyer.bid
+						+ " SEK\n");
 				sell_pq.deleteMinimum();
 				buy_pq.deleteMinimum();
 			}
 		}
 
-		sb.append("Order book:\n");
+		sb.append("\nOrder book:\n");
 
-		sb.append("Sellers: ");
+		sb.append("    Sellers: \n");
 		while (sell_pq.size() > 0) {
-			sb.append("Selling bid:" + sell_pq.minimum().toString() + "\n");
+			sb.append("        - " + sell_pq.minimum().toString() + "\n");
 			sell_pq.deleteMinimum();
 		}
 
-		sb.append("Buyers: ");
+		sb.append("    Buyers: \n");
 		while (buy_pq.size() > 0) {
-			sb.append("Buying bid:" + buy_pq.minimum().toString() + "\n");
+			sb.append("        - " + buy_pq.minimum().toString() + "\n");
 			buy_pq.deleteMinimum();
 		}
 
@@ -89,21 +89,18 @@ public class Lab2 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		final BufferedReader actions;
-		if (args.length != 1) {
-			actions = new BufferedReader(new InputStreamReader(System.in));
-		} else {
-			actions = new BufferedReader(new FileReader(args[0]));
+		BufferedReader actions = new BufferedReader(new FileReader("bidders.txt"));
+		List<String> lines = new LinkedList<>();
+		try {
+			while (true) {
+				String line = actions.readLine();
+				if (line == null)
+					break;
+				lines.add(line);
+			}
+		} finally {
+			actions.close();
 		}
-
-		List<String> lines = new LinkedList<String>();
-		while (true) {
-			String line = actions.readLine();
-			if (line == null)
-				break;
-			lines.add(line);
-		}
-		actions.close();
 
 		System.out.println(pureMain(lines.toArray(new String[lines.size()])));
 	}
