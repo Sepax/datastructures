@@ -23,6 +23,6 @@ public class Bid {
 	}
 
 	public String toString() {
-		return name + ", " + bid + " SEK";
+		return name + " " + bid;
 	}
 }

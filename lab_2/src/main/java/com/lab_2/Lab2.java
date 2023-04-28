@@ -71,17 +71,17 @@ public class Lab2 {
 			}
 		}
 
-		sb.append("\nOrder book:\n");
+		sb.append("\nOrder book:");
 
-		sb.append("    Sellers: \n");
+		sb.append("\nSellers: ");
 		while (sell_pq.size() > 0) {
-			sb.append("        - " + sell_pq.minimum().toString() + "\n");
+			sb.append(sell_pq.minimum().toString() + ", ");
 			sell_pq.deleteMinimum();
 		}
 
-		sb.append("    Buyers: \n");
+		sb.append("\nBuyers: ");
 		while (buy_pq.size() > 0) {
-			sb.append("        - " + buy_pq.minimum().toString() + "\n");
+			sb.append(buy_pq.minimum().toString() + ", ");
 			buy_pq.deleteMinimum();
 		}
 
