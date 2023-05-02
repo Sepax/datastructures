@@ -29,40 +29,30 @@ public class Lab2 {
 						"line " + line_no + ": invalid price");
 			}
 
+			Bid bid = new Bid(name, price);
+
 			if (action.equals("K")) {
-				buy_pq.add(new Bid(name, price));
+				buy_pq.add(bid);
 			} else if (action.equals("S")) {
-				sell_pq.add(new Bid(name, price));
+				sell_pq.add(bid);
 			} else if (action.equals("NK")) {
-				for (int i = 0; i < buy_pq.size(); i++) {
-					if (buy_pq.get(i).name.equals(name)) {
-						buy_pq.update(buy_pq.get(i), new Bid(name, price));
-					}
-				}
+				Bid newBid = new Bid(name, Integer.parseInt(parts[3]));
+				buy_pq.update(bid, newBid);
 			} else if (action.equals("NS")) {
-				for (int i = 0; i < sell_pq.size(); i++) {
-					if (sell_pq.get(i).name.equals(name)) {
-						sell_pq.update(sell_pq.get(i), new Bid(name, price));
-					}
-				}
+				Bid newBid = new Bid(name, Integer.parseInt(parts[3]));
+				sell_pq.update(bid, newBid);
 			} else {
 				throw new RuntimeException("line " + line_no + ": invalid action");
 			}
 
-			if (sell_pq.size() == 0 || buy_pq.size() == 0)
+			if (sell_pq.size() == 0 || buy_pq.size() == 0) {
 				continue;
+			}
 
-			// TODO:
-			// compare the bids of highest priority from each of
-			// each priority queues.
-			// if the lowest seller price is lower than or equal to
-			// the highest buyer price, then remove one bid from
-			// each priority queue and add a description of the
-			// transaction to the output.
+			Bid seller = sell_pq.minimum();
+			Bid buyer = buy_pq.minimum();
 
-			if (sell_pq.minimum().bid <= buy_pq.minimum().bid) {
-				Bid seller = sell_pq.minimum();
-				Bid buyer = buy_pq.minimum();
+			if (seller.bid <= buyer.bid) {
 				sb.append("Transaction: " + buyer.name + " buys a share from " + seller.name + " for " + buyer.bid
 						+ " SEK\n");
 				sell_pq.deleteMinimum();

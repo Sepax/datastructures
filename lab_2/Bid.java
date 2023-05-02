@@ -12,8 +12,9 @@ public class Bid {
 		return 1 + 23 * bid + 31 * name.hashCode();
 	}
 
+	// Checks if an ojebct is equal to this bid
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Bid)) {
+		if (!(obj instanceof Bid)) {
 			return false;
 		}
 
@@ -21,6 +22,7 @@ public class Bid {
 		return this.bid == aBid.bid && this.name.equals(aBid.name);
 	}
 
+	// Returns a string representation of this bid
 	public String toString() {
 		return name + " " + bid;
 	}
