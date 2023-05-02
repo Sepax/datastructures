@@ -1,4 +1,3 @@
-package com.lab_2;
 
 public class Bid {
 	public final String name;

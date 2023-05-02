@@ -1,4 +1,3 @@
-package com.lab_2;
 
 import java.io.*;
 import java.util.*;
@@ -89,18 +88,21 @@ public class Lab2 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		BufferedReader actions = new BufferedReader(new FileReader("bidders.txt"));
-		List<String> lines = new LinkedList<>();
-		try {
-			while (true) {
-				String line = actions.readLine();
-				if (line == null)
-					break;
-				lines.add(line);
-			}
-		} finally {
-			actions.close();
+		final BufferedReader actions;
+		if (args.length != 1) {
+			actions = new BufferedReader(new InputStreamReader(System.in));
+		} else {
+			actions = new BufferedReader(new FileReader(args[0]));
 		}
+
+		List<String> lines = new LinkedList<String>();
+		while (true) {
+			String line = actions.readLine();
+			if (line == null)
+				break;
+			lines.add(line);
+		}
+		actions.close();
 
 		System.out.println(pureMain(lines.toArray(new String[lines.size()])));
 	}

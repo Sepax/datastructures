@@ -1,4 +1,3 @@
-package com.lab_2;
 
 import java.util.Comparator;
 
