@@ -30,7 +30,7 @@ mergeSkew (Node elem1 (l1) (r1)) (Node elem2 (l2) (r2))
 -- delete element from Skew
 deleteSkew ::  Ord a => a -> Skew a -> Skew a
 deleteSkew _ Empty = Empty
-deleteSkew x (Node elem (left) (right))
+deleteSkew x (Node elem left right)
     | x < elem     = Node elem (deleteSkew x right) left
     | x > elem     = Node elem left (deleteSkew x right)
     | otherwise    = mergeSkew left right

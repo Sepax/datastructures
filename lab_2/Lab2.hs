@@ -98,7 +98,7 @@ instance Show SellBid where
   show (Seller seller sellthebid) = show seller ++ " " ++ show sellthebid
 
 
-  
+
 
 data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
 
@@ -108,14 +108,14 @@ data OrderBook = OrderBook (Skew BuyBid, Skew SellBid) deriving Show
 
 
 main1 :: IO ()
-main1 = do 
+main1 = do
   file <- readFile "bidders.txt"
   let list = lines file
-  let bidList = fileToBid list 
+  let bidList = fileToBid list
   let bidLIST = eitherToBids bidList
-  case bidList of 
+  case bidList of
     Left x ->  print ("WRONG INPUT NOT BUYER OR SELLER (parse failed) >" ++ x)
-    Right x -> print x 
+    Right x -> print x
   let ob = orderBids' bidLIST
   print "THE ORDERBOOK IS HERE > "
   putStrLn (printOB ob)
@@ -125,23 +125,26 @@ fileToBid :: [String] -> Either String [Bid]
 fileToBid strList = traverse parseBid strList
 
 eitherToBids :: Either String [Bid] -> [Bid]
-eitherToBids either = case either of 
+eitherToBids either = case either of
   Right x -> x
   Left x -> error "ooopsie"
 
 buySingle :: BuyBid -> Skew BuyBid
-buySingle buybid = single buybid 
+buySingle buybid = single buybid
 
 sellSingle :: SellBid -> Skew SellBid
 sellSingle sellbid = single sellbid
 
+singleTrade :: OrderBook -> IO (OrderBook)
+singleTrade bid = undefined
+
 -- Helper function for orderbids' witch has an extra argument of OrderBook
-orderBids :: [Bid] -> OrderBook -> OrderBook 
+orderBids :: [Bid] -> OrderBook -> OrderBook
 orderBids [] (OrderBook (buy,sell)) =(OrderBook (buy,sell))
-orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of 
-  (Buy name price)                 -> orderBids bids (OrderBook ((insertSkew (Buyer name price) (buy)),(sell)))
-  (Sell name price)                -> orderBids bids (OrderBook ((buy),(insertSkew (Seller name price) (sell))))
-  (NewBuy name oldPrice newPrice)  -> orderBids bids (OrderBook ((insertSkew (Buyer name newPrice) (buy)),(sell)))
+orderBids (bid:bids) (OrderBook (buy,sell)) = case bid of
+  (Buy name price)                 -> orderBids bids (OrderBook (insertSkew (Buyer name price) buy,sell))
+  (Sell name price)                -> orderBids bids (OrderBook (buy,insertSkew (Seller name price) sell))
+  (NewBuy name oldPrice newPrice)  -> orderBids bids (OrderBook ((insertSkew (Buyer name newPrice) buy),(sell)))
   (NewSell name oldPrice newPrice) -> orderBids bids (OrderBook ((buy),(insertSkew (Seller name newPrice) (sell))))
 
 -- inputs a list of bids and returns a Orderbook with a two SkewHeaps (one for buyers one for sellers)
@@ -164,6 +167,21 @@ printOB (OrderBook (buyersBids,sellerBids)) =
     where
       showSell x@(Node seller sellt1 sellt2) = case isEmpty x of
         True      -> ""
+<<<<<<< Updated upstream
         False     ->  show seller ++ " , " ++ (showSell sellt1) ++ (showSell sellt2) 
       showSell empty = ""
       
+=======
+        False     ->  show seller ++ " : " ++ (showSell sellt1) ++ " " ++ (showSell sellt2)
+      showSell empty = ""
+
+
+
+
+
+
+
+
+
+
+>>>>>>> Stashed changes
