@@ -20,10 +20,11 @@ module AATree (
 data AATree a = Empty | Node a (AATree a) (AATree a) Int
   deriving (Eq, Show, Read)
 
+--Gives empty tree
 emptyTree :: AATree a
 emptyTree = Empty
 
---- får någon warning av ngn fkn anledning men aja
+-- Tells us if a value is in the AATree and returns a Maybe
 
 get :: Ord a => a -> AATree a -> Maybe a
 get _ Empty = Nothing
@@ -33,12 +34,29 @@ get value ((Node x left right _))
   | value == x = Just x
   | otherwise = Nothing
 
--- You may find it helpful to define
---   split :: AATree a -> AATree a
---   skew  :: AATree a -> AATree a
--- and call these from insert.
+
+-- Helpers (Kinda) for insert!
+split :: AATree a -> AATree a
+split aaTree = aaTree
+split (Node value left (Node value' left' right'@(Node _ _ _ checklvl) level') level)
+  | level == checklvl = (Node value' (Node value left right' level) right' (level'+1))
+
+skew  :: AATree a -> AATree a
+skew aaTree = aaTree
+skew (Node value left@(Node value' left' right' level') right level)
+  | level == level' = Node value' left' (Node value right' right level) level'
+
+
+
+--inserts given value into AATree, if value already exist in tree -> return input tree unchanged
 insert :: Ord a => a -> AATree a -> AATree a
-insert = error "insert not implemented"
+insert value Empty = Node value Empty Empty 1
+insert value aaTree@((Node x left right level))
+  | value < x  = go (Node x (insert value left) right level)
+  | value > x  = go (Node x left (insert value right) level)
+  | value == x = aaTree
+    where
+      go = split . skew
 
 inorder :: AATree a -> [a]
 inorder = error "inorder not implemented"
