@@ -39,7 +39,7 @@ get value ((Node x left right _))
 split :: AATree a -> AATree a
 split aaTree = aaTree
 split (Node value left (Node value' left' right'@(Node _ _ _ checklvl) level') level)
-  | level == checklvl = (Node value' (Node value left right' level) right' (level'+1))
+  | level == checklvl = Node value' (Node value left right' level) right' (level'+1)
 
 skew  :: AATree a -> AATree a
 skew aaTree = aaTree
@@ -59,10 +59,13 @@ insert value aaTree@((Node x left right level))
       go = split . skew
 
 inorder :: AATree a -> [a]
-inorder = error "inorder not implemented"
+inorder Empty = []
+inorder (Node x Empty Empty _) = [x]
+inorder (Node x left right _) = inorder left ++ [x] ++ inorder right
 
 size :: AATree a -> Int
-size = error "size not implemented"
+size Empty = 0
+size (Node x left right _) = size left + size right + 1
 
 height :: AATree a -> Int
 height = error "height not implemented"
