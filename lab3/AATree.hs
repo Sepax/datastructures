@@ -68,7 +68,10 @@ size Empty = 0
 size (Node x left right _) = size left + size right + 1
 
 height :: AATree a -> Int
-height = error "height not implemented"
+height Empty = 1
+height (Node _ left right _) 
+  | height left  > height right = height left   + 1
+  | height right >= height left  = height right  + 1
 
 --------------------------------------------------------------------------------
 -- Optional function
