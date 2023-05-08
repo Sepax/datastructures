@@ -1,0 +1,92 @@
+Arrays of length 10
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       0,000017 |       0,000009 |       0,000009
+Quicksort      |       0,000142 |       0,000141 |       0,000114
+Merge sort     |       0,000248 |       0,000151 |       0,000141
+
+Arrays of length 30
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       0,000157 |       0,000036 |       0,000025
+Quicksort      |       0,000634 |       0,000532 |       0,000516
+Merge sort     |       0,000598 |       0,000477 |       0,000506
+
+Arrays of length 100
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       0,001497 |       0,000207 |       0,000105
+Quicksort      |       0,002759 |       0,002110 |       0,002014
+Merge sort     |       0,002296 |       0,002238 |       0,002111
+
+Arrays of length 300
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       0,012928 |       0,001296 |       0,000330
+Quicksort      |       0,010485 |       0,007503 |       0,006389
+Merge sort     |       0,008540 |       0,007781 |       0,008837
+
+Arrays of length 1000
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       0,139995 |       0,010142 |       0,000852
+Quicksort      |       0,042849 |       0,027451 |       0,022647
+Merge sort     |       0,042259 |       0,029940 |       0,026234
+
+Arrays of length 3000
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |       1,155835 |       0,073149 |       0,002276
+Quicksort      |       0,142802 |       0,087565 |       0,073963
+Merge sort     |       0,225344 |       0,100769 |       0,094011
+
+Arrays of length 10000
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |      12,959600 |       0,936180 |       0,007338
+Quicksort      |       0,542780 |       0,314129 |       0,257368
+Merge sort     |       0,867845 |       0,379447 |       0,336936
+
+Arrays of length 30000
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |     119,792100 |       7,687000 |       0,022526
+Quicksort      |       1,808557 |       0,992942 |       0,811261
+Merge sort     |       3,070650 |       1,572856 |       1,061943
+
+Arrays of length 100000
+=================================================================
+Algorithm      |         Random |     95% sorted |         Sorted
+Insertion sort |    1473,488800 |      89,135600 |       0,070315
+Quicksort      |       6,525500 |       3,468540 |       2,809417
+Merge sort     |      13,019600 |       4,815933 |       4,073300
+
+
+------------------------- Is there a size cutoff at which a different algorithm becomes best? -------------------------
+
+InsertionSort is by far the fastest for unsorted arrays with 100 elements or less. For the 95% sorted arrays it is 
+faster for arrays with 1000 elements or less. With sorted arrays it always the fastest. We could say that it is the
+fastest algoritm when the unsorted part of the array consists of less than ~100 elements.
+
+The speed of QuickSort and MergeSort is comparable up until arrays with 10000 elements or more. Afer this limit 
+MergeSort gets a lot slower than QuickSort. (with mergesort being somewhat faster between 300 and 30 elements)
+
+
+---------------------- How does the type of test data affect which algorithm you should choose? -----------------------
+
+InsertionSort should be used on data with a small amount of elements, or if we know a very large the portion
+of the elements are sorted elements.
+
+MergeSort is slightly faster in some cases compared to QuickSort, but not at the extent of which it is practical.
+We would therefore use QuickSort in all other cases where insertionSort is not better to use.
+
+
+----------------------- Which should you choose if you don’t know anything about the test data? -----------------------
+
+QuickSort, even if it takes somewhat longer to sort a small amount of elements, if the data happens to contain
+a large quantity of elements the excecution time would take exponentially longer to finish.
+
+
+-------------------- Are there circumstances when you should definitely avoid a certain algorithm? --------------------
+
+InsertionSort where the data contains a large amount of unsorted elements.
