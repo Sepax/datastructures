@@ -68,7 +68,6 @@ size Empty = 0
 size (Node x left right _) = size left + size right + 1
 
 height :: AATree a -> Int
-height Empty = 1
 height (Node _ left right _) 
   | height left  > height right = height left   + 1
   | height right >= height left  = height right  + 1
@@ -107,15 +106,15 @@ isSorted (x:xs)
 --     rightGrandchildOK node
 -- where each conjunct checks one aspect of the invariant
 checkLevels :: AATree a -> Bool
-checkLevels = error "checkLevels not implemented"
+checkLevels aaTree@(Node _ _ _ level) = error "checkLevels not implemented"
 
 isEmpty :: AATree a -> Bool
-isEmpty = error "isEmpty not implemented"
+isEmpty aaTree = case aaTree of
+  Empty -> True
+  _     -> False
 
 leftSub :: AATree a -> AATree a
-leftSub = error "leftSub not implemented"
+leftSub (Node x left right level) = left
 
 rightSub :: AATree a -> AATree a
-rightSub = error "rightSub not implemented"
-
---------------------------------------------------------------------------------
+rightSub (Node x left right level) = right
