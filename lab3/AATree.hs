@@ -106,7 +106,15 @@ isSorted (x:xs)
 --     rightGrandchildOK node
 -- where each conjunct checks one aspect of the invariant
 checkLevels :: AATree a -> Bool
-checkLevels aaTree@(Node _ _ _ level) = error "checkLevels not implemented"
+checkLevels (Node _ (Node _ _ _ llevel) (Node _ (Node _ _ _ rgclevel) _ rlevel ) level) 
+  = leftChildOK && rightChildOK && rightGChildOK
+    where
+      leftChildOK   = llevel < level
+      rightChildOK  = rlevel <= level
+      rightGChildOK  
+        | (level == rlevel) && (rgclevel < rlevel)                       = True
+        | (level >  rlevel) && ((rgclevel==rlevel) || rgclevel < rlevel) = True
+        | otherwise = False
 
 isEmpty :: AATree a -> Bool
 isEmpty aaTree = case aaTree of
@@ -114,7 +122,9 @@ isEmpty aaTree = case aaTree of
   _     -> False
 
 leftSub :: AATree a -> AATree a
-leftSub (Node x left right level) = left
+leftSub Empty = Empty
+leftSub (Node _ left _ _) = left
 
 rightSub :: AATree a -> AATree a
-rightSub (Node x left right level) = right
+rightSub Empty = Empty
+rightSub (Node _ _ right _) = right
