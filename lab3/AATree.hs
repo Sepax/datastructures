@@ -93,7 +93,11 @@ checkTree root =
 
 -- True if the given list is ordered
 isSorted :: Ord a => [a] -> Bool
-isSorted = error "isSorted not implemented"
+isSorted []     = True
+isSorted (x:[])    = True
+isSorted (x:xs) 
+  | x < head xs = isSorted xs
+  | x > head xs = False
 
 -- Check if the invariant is true for a single AA node
 -- You may want to write this as a conjunction e.g.
