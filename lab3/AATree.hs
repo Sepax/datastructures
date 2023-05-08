@@ -35,16 +35,18 @@ get value ((Node x left right _))
   | otherwise = Nothing
 
 
+
 -- Helpers (Kinda) for insert!
 split :: AATree a -> AATree a
-split aaTree = aaTree
-split (Node value left (Node value' left' right'@(Node _ _ _ checklvl) level') level)
+split (Node value left (Node value' _ right'@(Node _ _ _ checklvl) level') level)
   | level == checklvl = Node value' (Node value left right' level) right' (level'+1)
+split t = t
 
 skew  :: AATree a -> AATree a
-skew aaTree = aaTree
-skew (Node value left@(Node value' left' right' level') right level)
+skew (Node value (Node value' left' right' level') right level)
   | level == level' = Node value' left' (Node value right' right level) level'
+skew t = t
+
 
 
 
@@ -65,12 +67,15 @@ inorder (Node x left right _) = inorder left ++ [x] ++ inorder right
 
 size :: AATree a -> Int
 size Empty = 0
-size (Node x left right _) = size left + size right + 1
+size (Node _ left right _) = size left + size right + 1
 
 height :: AATree a -> Int
-height (Node _ left right _) 
-  | height left  > height right = height left   + 1
-  | height right >= height left  = height right  + 1
+height Empty = -1
+height aaTree
+  | height (leftSub aaTree)  > height (rightSub aaTree) = height (leftSub aaTree)   + 1
+  | height (rightSub aaTree) >= height (leftSub aaTree)  = height (rightSub aaTree) + 1
+
+
 
 --------------------------------------------------------------------------------
 -- Optional function
@@ -93,10 +98,9 @@ checkTree root =
 -- True if the given list is ordered
 isSorted :: Ord a => [a] -> Bool
 isSorted []     = True
-isSorted (x:[])    = True
 isSorted (x:xs) 
   | x < head xs = isSorted xs
-  | x > head xs = False
+  | otherwise   = False
 
 -- Check if the invariant is true for a single AA node
 -- You may want to write this as a conjunction e.g.
@@ -106,15 +110,23 @@ isSorted (x:xs)
 --     rightGrandchildOK node
 -- where each conjunct checks one aspect of the invariant
 checkLevels :: AATree a -> Bool
-checkLevels (Node _ (Node _ _ _ llevel) (Node _ (Node _ _ _ rgclevel) _ rlevel ) level) 
-  = leftChildOK && rightChildOK && rightGChildOK
-    where
-      leftChildOK   = llevel < level
-      rightChildOK  = rlevel <= level
-      rightGChildOK  
-        | (level == rlevel) && (rgclevel < rlevel)                       = True
-        | (level >  rlevel) && ((rgclevel==rlevel) || rgclevel < rlevel) = True
-        | otherwise = False
+checkLevels aaTree = leftChildOK aaTree && rightChildOK aaTree && rightGChildOK aaTree
+
+leftChildOK :: AATree a -> Bool
+leftChildOK (Node _ (Node _ _ _ lLevel) _ sLevel) = lLevel < sLevel
+leftChildOK _ = True
+
+rightChildOK :: AATree a -> Bool
+rightChildOK (Node _ _ (Node _ _ _ rLevel) sLevel) 
+  = rLevel <= sLevel
+rightChildOK _ = True
+
+rightGChildOK :: AATree a -> Bool
+rightGChildOK (Node _ _ (Node _ _ (Node _ _ _ rgLevel)rLevel)sLevel)
+  | (rLevel == sLevel) && (rgLevel < rLevel)                      = True
+  | (rLevel <  sLevel) && (rgLevel < rLevel || rgLevel == rLevel) = True
+  |  otherwise = False
+rightGChildOK _ = True
 
 isEmpty :: AATree a -> Bool
 isEmpty aaTree = case aaTree of
