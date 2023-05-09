@@ -59,6 +59,7 @@ insert value aaTree@((Node x left right level))
   | value == x = aaTree
     where
       go = split . skew
+insert _ t = t
 
 inorder :: AATree a -> [a]
 inorder Empty = []
