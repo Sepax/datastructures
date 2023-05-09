@@ -38,28 +38,28 @@ get value ((Node x left right _))
 
 -- Helpers (Kinda) for insert!
 split :: AATree a -> AATree a
-split (Node value left (Node value' _ right'@(Node _ _ _ checklvl) level') level)
-  | level == checklvl = Node value' (Node value left right' level) right' (level'+1)
+split t@(Node x a (Node y b (Node z c d kright) k2) k1)
+  | k1 == k2 && k1 == kright = (Node y (Node x a b k1) (Node z c d k1) (k1+1))
+  | otherwise = t
 split t = t
 
 skew  :: AATree a -> AATree a
-skew (Node value (Node value' left' right' level') right level)
-  | level == level' = Node value' left' (Node value right' right level) level'
+skew t@(Node y (Node x a b level') c level) 
+  | level' == level = (Node x a (Node y b c level) level)
+  | otherwise = t 
 skew t = t
-
 
 
 
 --inserts given value into AATree, if value already exist in tree -> return input tree unchanged
 insert :: Ord a => a -> AATree a -> AATree a
-insert value Empty = Node value Empty Empty 1
-insert value aaTree@((Node x left right level))
-  | value < x  = go (Node x (insert value left) right level)
-  | value > x  = go (Node x left (insert value right) level)
-  | value == x = aaTree
-    where
-      go = split . skew
-insert _ t = t
+insert e Empty = Node e Empty Empty 1
+insert e t@(Node n l r lvl) = case compare e n of
+  EQ -> t
+  LT -> go $ Node n (insert e l) r lvl
+  GT -> go $ Node n l (insert e r) lvl
+  where
+    go = split . skew
 
 inorder :: AATree a -> [a]
 inorder Empty = []
@@ -100,6 +100,7 @@ checkTree root =
 -- True if the given list is ordered
 isSorted :: Ord a => [a] -> Bool
 isSorted []     = True
+isSorted [x] = True
 isSorted (x:xs) 
   | x <= head xs = isSorted xs
   | otherwise   = False
