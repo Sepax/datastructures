@@ -21,11 +21,12 @@ data AATree a = Empty | Node a (AATree a) (AATree a) Int
   deriving (Eq, Show, Read)
 
 --Gives empty tree
+-- O( 1 )
 emptyTree :: AATree a
 emptyTree = Empty
 
 -- Tells us if a value is in the AATree and returns a Maybe
-
+-- O( log(n) )
 get :: Ord a => a -> AATree a -> Maybe a
 get _ Empty = Nothing
 get value ((Node x left right _))
@@ -70,6 +71,8 @@ size :: AATree a -> Int
 size Empty = 0
 size (Node _ left right _) = size left + size right + 1
 
+
+-- O ( n ) (Där n = antal noder i AATree)
 height :: AATree a -> Int
 height Empty = -1
 height (Node _ left right _ ) 
@@ -98,6 +101,8 @@ checkTree root =
       | otherwise = x:nodes (leftSub x) ++ nodes (rightSub x)
 
 -- True if the given list is ordered
+
+-- O ( n ) (Där n = listans längd)
 isSorted :: Ord a => [a] -> Bool
 isSorted []     = True
 isSorted [x] = True
@@ -112,18 +117,24 @@ isSorted (x:xs)
 --     rightChildOK node &&
 --     rightGrandchildOK node
 -- where each conjunct checks one aspect of the invariant
+
+
+-- O ( 1 )
 checkLevels :: AATree a -> Bool
 checkLevels aaTree = leftChildOK aaTree && rightChildOK aaTree && rightGChildOK aaTree
 
+-- O( 1 )
 leftChildOK :: AATree a -> Bool
 leftChildOK (Node _ (Node _ _ _ lLevel) _ sLevel) = lLevel < sLevel
 leftChildOK _ = True
 
+-- O( 1 )
 rightChildOK :: AATree a -> Bool
 rightChildOK (Node _ _ (Node _ _ _ rLevel) sLevel) 
   = rLevel <= sLevel
 rightChildOK _ = True
 
+-- O( 1 )
 rightGChildOK :: AATree a -> Bool
 rightGChildOK (Node _ _ (Node _ _ (Node _ _ _ rgLevel)rLevel)sLevel)
   | (rLevel == sLevel) && (rgLevel < rLevel)                      = True
@@ -131,15 +142,16 @@ rightGChildOK (Node _ _ (Node _ _ (Node _ _ _ rgLevel)rLevel)sLevel)
   |  otherwise = False
 rightGChildOK _ = True
 
+-- O( 1 )
 isEmpty :: AATree a -> Bool
 isEmpty aaTree = case aaTree of
   Empty -> True
   _     -> False
-
+-- O( 1 )
 leftSub :: AATree a -> AATree a
 leftSub Empty = Empty
 leftSub (Node _ left _ _) = left
-
+-- O( 1 )
 rightSub :: AATree a -> AATree a
 rightSub Empty = Empty
 rightSub (Node _ _ right _) = right
