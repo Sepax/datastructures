@@ -21,8 +21,6 @@ main = do
   let h' = fromIntegral ( ceiling ( logBase 2 (s+1) ) - 1 )
   let r  = h / h' :: Double
 
-  print tree
-
   putStrLn $ "size: " ++ show s
   putStrLn $ "height: " ++ show h
   putStrLn $ "optimal height': " ++ show h'
