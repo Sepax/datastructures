@@ -72,9 +72,10 @@ size (Node _ left right _) = size left + size right + 1
 
 height :: AATree a -> Int
 height Empty = -1
-height aaTree
-  | height (leftSub aaTree)  > height (rightSub aaTree) = height (leftSub aaTree)   + 1
-  | height (rightSub aaTree) >= height (leftSub aaTree)  = height (rightSub aaTree) + 1
+height (Node _ left right _ ) 
+  | height left > height right = height left + 1
+  | otherwise = height right + 1  
+
 
 
 
