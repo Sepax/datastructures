@@ -100,7 +100,7 @@ checkTree root =
 isSorted :: Ord a => [a] -> Bool
 isSorted []     = True
 isSorted (x:xs) 
-  | x < head xs = isSorted xs
+  | x <= head xs = isSorted xs
   | otherwise   = False
 
 -- Check if the invariant is true for a single AA node

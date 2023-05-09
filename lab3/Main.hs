@@ -15,26 +15,20 @@ main :: IO ()
 main = do
   contents <- getContents
 
-  -- split the data into words and build an AA tree
-  -- use foldl
-  -- Split the text into words
-
-  -- Insert the words into the AA tree
-  let tree = foldl (\acc x -> insert x acc) emptyTree (words contents)
-  
-  -- calculate and print statistics
+  let tree = foldl (flip insert) emptyTree (words contents)
   let s  = fromIntegral ( size tree )
   let h  = fromIntegral ( height tree )
   let h' = fromIntegral ( ceiling ( logBase 2 (s+1) ) - 1 )
   let r  = h / h' :: Double
 
-  -- Test with checkTree and print result
-  let invariant = undefined
+  print tree
 
-  -- use fromIntegral/ceiling/logBase
-  undefined
-
-
+  putStrLn $ "size: " ++ show s
+  putStrLn $ "height: " ++ show h
+  putStrLn $ "optimal height': " ++ show h'
+  putStrLn $ "ratio: " ++ show r
+  putStrLn $ "Invariant: " ++ show (checkTree tree)
+  putStrLn $ "First 20 words: " ++ ( unwords $ take 20 $ inorder tree )
 
 --------------------------------------------------------------------------------
 
