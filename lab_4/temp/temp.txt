@@ -1,0 +1,57 @@
+[LineTable {lineNumber = 1, stops = 
+    [LineStop {stopName = "SFO", time = 0},
+     LineStop {stopName = "BOS", time = 2704},
+     LineStop {stopName = "ORD", time = 867},
+     LineStop {stopName = "SFO", time = 1846},
+     LineStop {stopName = "ORD", time = 1846},
+     LineStop {stopName = "BOS", time = 867},
+     LineStop {stopName = "SFO", time = 2704}]},
+ LineTable {lineNumber = 2, stops = [LineStop {stopName = "JFK", time = 0},LineStop {stopName = "BOS", time = 187},LineStop {stopName = "MIA", time = 1258},LineStop {stopName = "JFK", time = 1090},LineStop {stopName = "MIA", time = 1090},LineStop {stopName = "BOS", time = 1258},LineStop {stopName = "JFK", time = 187}]},
+ LineTable {lineNumber = 3, stops = [LineStop {stopName = "SFO", time = 0},LineStop {stopName = "DFW", time = 1464},LineStop {stopName = "LAX", time = 1235},LineStop {stopName = "SFO", time = 337},LineStop {stopName = "LAX", time = 337},LineStop {stopName = "DFW", time = 1235},LineStop {stopName = "SFO", time = 1464}]},
+ LineTable {lineNumber = 4, stops = [LineStop {stopName = "MIA", time = 0},LineStop {stopName = "JFK", time = 1090},LineStop {stopName = "ORD", time = 740},LineStop {stopName = "DFW", time = 802},LineStop {stopName = "MIA", time = 1121},LineStop {stopName = "DFW", time = 1121},LineStop {stopName = "ORD", time = 802},LineStop {stopName = "JFK", time = 740},LineStop {stopName = "MIA", time = 1090}]},
+ LineTable {lineNumber = 5, stops = [LineStop {stopName = "MIA", time = 0},LineStop {stopName = "LAX", time = 2342},LineStop {stopName = "MIA", time = 2342}]}]
+
+[Stop {name = "SFO", position = (100,800)},
+        Stop {name = "LAX", position = (200,600)},
+        Stop {name = "ORD", position = (500,950)},
+        Stop {name = "DFW", position = (400,500)},
+        Stop {name = "MIA", position = (600,200)},
+        Stop {name = "JFK", position = (610,900)},
+        Stop {name = "BOS", position = (700,1000)}]
+
+
+Graph (fromList [("BOS",[Edge {src = "BOS", dst = "ORD", label = 867},
+                         Edge {src = "BOS", dst = "SFO", label = 2704},
+                         Edge {src = "BOS", dst = "MIA", label = 1258},
+                         Edge {src = "BOS", dst = "JFK", label = 187}]),
+                 ("DFW",[Edge {src = "DFW", dst = "LAX", label = 1235},
+                         Edge {src = "DFW", dst = "SFO", label = 1464},
+                         Edge {src = "DFW", dst = "MIA", label = 1121},
+                         Edge {src = "DFW", dst = "ORD", label = 802}]),
+                 ("JFK",[Edge {src = "JFK", dst = "BOS", label = 187},
+                         Edge {src = "JFK", dst = "MIA", label = 1090},
+                         Edge {src = "JFK", dst = "ORD", label = 740},
+                         Edge {src = "JFK", dst = "MIA", label = 1090}]),
+                 ("LAX",[Edge {src = "LAX", dst = "SFO", label = 337},
+                         Edge {src = "LAX", dst = "DFW", label = 1235},
+                         Edge {src = "LAX", dst = "MIA", label = 2342}]),
+                 ("MIA",[Edge {src = "MIA", dst = "JFK", label = 1090},
+                         Edge {src = "MIA", dst = "BOS", label = 1258},
+                         Edge {src = "MIA", dst = "JFK", label = 1090},
+                         Edge {src = "MIA", dst = "DFW", label = 1121},
+                         Edge {src = "MIA", dst = "LAX", label = 2342}]),
+                 ("ORD",[Edge {src = "ORD", dst = "SFO", label = 1846},
+                         Edge {src = "ORD", dst = "BOS", label = 867},
+                         Edge {src = "ORD", dst = "DFW", label = 802},
+                         Edge {src = "ORD", dst = "JFK", label = 740}]),
+                 ("SFO",[Edge {src = "SFO", dst = "BOS", label = 2704},
+                         Edge {src = "SFO", dst = "ORD", label = 1846},
+                         Edge {src = "SFO", dst = "DFW", label = 1464},
+                         Edge {src = "SFO", dst = "LAX", label = 337}])])
+
+
+Just [(A,0), (B, 15),(D, 46+15),]
+Just [(A,0), ]
+Nothing
+
+

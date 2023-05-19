@@ -1,35 +1,46 @@
-module Graph 
+module Graph
   ( -- * Edge
-    Edge                    -- type
-  , src, dst, label         -- querying an Edge
+    Edge, -- type
+    src,
+    dst,
+    label, -- querying an Edge
 
     -- * Graph
-  , Graph                   -- type
-  , empty                   -- create an empty map
-  , addVertex, addVertices  -- adding vertices (nodes)
-  , addEdge, addBiEdge      -- adding edges (one way or both ways)
-  , adj                     -- get adjacent nodes for a given node
-  , vertices, edges         -- querying a Graph
-  ) where
+    Graph, -- type
+    empty, -- create an empty map
+    addVertex,
+    addVertices, -- adding vertices (nodes)
+    addEdge,
+    addBiEdge, -- adding edges (one way or both ways)
+    adj, -- get adjacent nodes for a given node
+    vertices,
+    edges, -- querying a Graph
+    member, -- check if a key exists in a Graph
+  )
+where
 
 import Data.Map (Map)
-import qualified Data.Map as M
+import Data.Map qualified as M
 import Data.Maybe
 
--- An edge with a source and destination node (of type a), 
+-- An edge with a source and destination node (of type a),
 -- together with a label of type b
 data Edge a b = Edge
-  { src   :: a  -- ^ Source vertex
-  , dst   :: a  -- ^ Destination vertex
-  , label :: b  -- ^ The label
-  } deriving Show
+  { -- | Source vertex
+    src :: a,
+    -- | Destination vertex
+    dst :: a,
+    -- | The label
+    label :: b
+  }
+  deriving (Show)
 
 -- A graph with nodes of type a and labels of type b.
-data Graph a b = Graph (Map a [Edge a b]) deriving Show
+data Graph a b = Graph (Map a [Edge a b]) deriving (Show)
 
 -- Create an empty graph
 empty :: Graph a b
-empty = Graph (M.empty)
+empty = Graph M.empty
 
 -- Add a vertex (node) to a graph
 addVertex :: Ord a => a -> Graph a b -> Graph a b
@@ -37,10 +48,9 @@ addVertex v (Graph map) = Graph (M.insert v [] map)
 
 -- Add a list of vertices to a graph
 addVertices :: Ord a => [a] -> Graph a b -> Graph a b
-addVertices [] g = g
-addVertices (v:vs) g = addVertices vs (addVertex v g)
+addVertices vs g = foldl (flip addVertex) g vs
 
--- Add an edge to a graph, the first parameter is the start vertex (of type a), 
+-- Add an edge to a graph, the first parameter is the start vertex (of type a),
 -- the second parameter the destination vertex, and the third parameter is the
 -- label (of type b)
 addEdge :: Ord a => a -> a -> b -> Graph a b -> Graph a b
@@ -62,3 +72,11 @@ vertices (Graph map) = M.keys map
 -- Get all edges in a graph
 edges :: Graph a b -> [Edge a b]
 edges (Graph map) = concat (M.elems map)
+
+-- Check if vertex exists in map
+member :: Ord a => a -> Graph a b -> Bool
+member v (Graph map) = M.member v map
+
+-- Get all edges for a given vertex
+lookup :: Ord a => a -> Graph a b -> Maybe [Edge a b]
+lookup v (Graph map) = M.lookup v map
