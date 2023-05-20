@@ -1,6 +1,6 @@
 module Graph
   ( -- * Edge
-    Edge, -- type
+    Edge(..), -- type
     src,
     dst,
     label, -- querying an Edge
@@ -16,6 +16,7 @@ module Graph
     vertices,
     edges, -- querying a Graph
     member, -- check if a key exists in a Graph
+    neighbours, -- get neighbours of a node
   )
 where
 
@@ -77,6 +78,6 @@ edges (Graph map) = concat (M.elems map)
 member :: Ord a => a -> Graph a b -> Bool
 member v (Graph map) = M.member v map
 
--- Get all edges for a given vertex
-lookup :: Ord a => a -> Graph a b -> Maybe [Edge a b]
-lookup v (Graph map) = M.lookup v map
+-- Neighbours of a vertex
+neighbours :: Ord a => a -> Graph a b -> [a]
+neighbours v g = map dst (adj v g)
