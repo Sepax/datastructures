@@ -16,14 +16,14 @@ shortestPath g from to = undefined
 
 -- Dijkstra's algorithm implementation
 dijkstra :: (Ord a, Ord b, Num b) => Graph a b -> a -> PSQ a b
-dijkstra g from = case (G.member from g) of 
-  True  -> dijkstra' g (Q.singleton from 0) Q.empty
-  False -> Q.empty
+dijkstra g from 
+  | G.member from g = dijkstra' g (Q.singleton from 0) Q.empty
+  | otherwise       = Q.empty 
 
 dijkstra' :: (Ord a, Ord b, Num b) => Graph a b -> PSQ a b -> PSQ a b -> PSQ a b
-dijkstra' g q s = case (Q.null q) of
-  True  -> s
-  False -> dijkstra' g q' s'
+dijkstra' g q s 
+  | Q.null q  = s
+  | otherwise = dijkstra' g q' s'
     where
       q'   = Q.deleteMin (foldl (insertEdge s) q (G.adj (Q.key minQ) g))
       s'   = Q.insert (Q.key minQ) (Q.prio minQ) s
@@ -32,7 +32,7 @@ dijkstra' g q s = case (Q.null q) of
 insertEdge :: (Ord a, Ord b, Num b) => PSQ a b -> PSQ a b -> Edge a b -> PSQ a b
 insertEdge s q edge 
   | Q.lookup name s /= Nothing = q
-  | otherwise = Q.insert name weight q
+  | otherwise                  = Q.insert name weight q
     where 
       name    = dst edge
       weight  = if (Q.lookup name q == Nothing) then
