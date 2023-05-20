@@ -17,6 +17,7 @@ module Graph
     edges, -- querying a Graph
     member, -- check if a key exists in a Graph
     neighbours, -- get neighbours of a node
+    minEdge, -- get the edge with the smallest label
   )
 where
 
@@ -81,3 +82,8 @@ member v (Graph map) = M.member v map
 -- Neighbours of a vertex
 neighbours :: Ord a => a -> Graph a b -> [a]
 neighbours v g = map dst (adj v g)
+
+-- Get the edge with the smallest label
+minEdge :: Ord b => [Edge a b] -> Maybe (Edge a b)
+minEdge [] = Nothing
+minEdge edges = Just (foldl1 (\e1 e2 -> if label e1 < label e2 then e1 else e2) edges)
