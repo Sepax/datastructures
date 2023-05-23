@@ -9,17 +9,24 @@ import Route
 import RouteGUI
 
 -- Find the shortest path between two nodes (from and to) in a graph (g)
-shortestPath :: (Ord a, Ord b) => Graph a b -> a -> a -> Maybe ([a], b)
-shortestPath g from to = undefined
+shortestPath :: (Ord a, Ord b, Num b) => Graph a b -> a -> a -> Maybe ([a], b)
+shortestPath g from to
+  | list == [] || not (G.member from g || G.member to g) = Nothing
+  | otherwise = Just (list, weight)
+  where 
+    list = pathList pq from to
+    weight = label (fromJust (Q.lookup to pq))
+    pq = dijkstra g from
 
 
-pathList :: (Ord a, Ord b) => PSQ a (Edge a b) -> a -> a -> [a]
+pathList :: (Ord a, Ord b, Num b) => PSQ a (Edge a b) -> a -> a -> [a]
 pathList psq from to
-  | to /= from = (pathList psq from lastElemPrev) ++ [to]
-  | otherwise = []
+  | elem == Nothing = []
+  | to /= from      = (pathList psq from prev) ++ [to]
+  | otherwise       = [from]
     where
-      lastElem = fromJust (Q.lookup to psq)
-      lastElemPrev = src lastElem
+      elem = Q.lookup to psq
+      prev = src (fromJust elem)
 
 -- Dijkstra's algorithm implementation
 dijkstra :: (Ord a, Ord b, Num b) => Graph a b -> a -> PSQ a (Edge a b)
@@ -53,8 +60,8 @@ main = undefined -- TODO: read arguments, build graph, output shortest path
 
 startGUI :: IO ()
 startGUI = do
-  Right stops <- readStops "data/stops-air.txt"
-  Right lines <- readLines "data/lines-air.txt"
+  Right stops <- readStops "data/stops-nopath.txt"
+  Right lines <- readLines "data/lines-nopath.txt"
   let graph = graphBuilder stops lines
   runGUI stops lines graph shortestPath
 
