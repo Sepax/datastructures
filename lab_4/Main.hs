@@ -12,6 +12,15 @@ import RouteGUI
 shortestPath :: (Ord a, Ord b) => Graph a b -> a -> a -> Maybe ([a], b)
 shortestPath g from to = undefined
 
+
+pathList :: (Ord a, Ord b) => PSQ a (Edge a b) -> a -> a -> [a]
+pathList psq from to
+  | to /= from = (pathList psq from lastElemPrev) ++ [to]
+  | otherwise = []
+    where
+      lastElem = fromJust (Q.lookup to psq)
+      lastElemPrev = src lastElem
+
 -- Dijkstra's algorithm implementation
 dijkstra :: (Ord a, Ord b, Num b) => Graph a b -> a -> PSQ a (Edge a b)
 dijkstra g from
