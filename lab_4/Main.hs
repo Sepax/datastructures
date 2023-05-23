@@ -29,12 +29,12 @@ dijkstra' g q s
 
 insertEdge :: (Ord a, Ord b, Num b) => PSQ a (Edge a b) -> PSQ a (Edge a b) -> Edge a b -> PSQ a (Edge a b)
 insertEdge s q e
-  | Q.lookup node s /= Nothing = q
+  | (Q.lookup node s /= Nothing) && (Q.lookup node q == Nothing) = q
   | otherwise = Q.insert node newEdge q
   where
     node = dst e
     source = src e
-    newEdge = if (isJust (Q.lookup node s))
+    newEdge = if (isJust (Q.lookup node s) || (Q.lookup node q == Nothing))
     	then Edge source node (label e + label (Q.prio minQ))
       else min (Edge source node (label e + label (Q.prio minQ))) (fromJust $ Q.lookup node q)
     minQ = fromJust $ Q.findMin q
