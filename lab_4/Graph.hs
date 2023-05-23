@@ -35,7 +35,13 @@ data Edge a b = Edge
     -- | The label
     label :: b
   }
-  deriving (Show)
+  deriving (Show, Eq)
+
+instance (Ord b, Eq a) => Ord (Edge a b) where
+  compare e1 e2
+    | label e1 > label e2 = GT
+    | label e1 < label e2 = LT
+    | otherwise = EQ
 
 -- A graph with nodes of type a and labels of type b.
 data Graph a b = Graph (Map a [Edge a b]) deriving (Show)
