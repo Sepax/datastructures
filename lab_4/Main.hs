@@ -1,3 +1,4 @@
+import System.Environment (getArgs)
 import Data.Map (Map)
 import Data.Map qualified as M
 import Data.Maybe
@@ -56,7 +57,31 @@ insertEdge s q e
     minQ = fromJust $ Q.findMin q
 
 main :: IO ()
-main = undefined -- TODO: read arguments, build graph, output shortest path
+main = do
+  -- Get command-line arguments
+  args <- getArgs
+
+  -- Check if two arguments are provided
+  if length args /= 4
+    then putStrLn "Please provide four arguments."
+  else do
+    Right stops <- readStops $ head args  -- First text file argument
+    Right lines <- readLines $ args !! 1  -- Second text file argument
+    let src = args !! 2  -- Source stop
+        dst = args !! 3  -- Destination stop
+
+        -- Generate path from data
+        graph = graphBuilder stops lines
+        path  = shortestPath graph src dst
+    case path of 
+      Nothing -> print $ 2^31 -1
+      Just (list,time) -> do
+        print time
+        putStr $ unlines list
+    
+
+
+
 
 startGUI :: IO ()
 startGUI = do
